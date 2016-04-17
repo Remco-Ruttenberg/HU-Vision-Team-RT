@@ -1,45 +1,51 @@
 #include "RGBImageStudent.h"
 
 RGBImageStudent::RGBImageStudent() : RGBImage() {
-	int throwError = 0, e = 1 / throwError; //Throws error without the need to include a header
-	//TODO: Nothing
 }
 
-RGBImageStudent::RGBImageStudent(const RGBImageStudent &other) : RGBImage(other.getWidth(), other.getHeight()) {
-	int throwError = 0, e = 1 / throwError;
-	//TODO: Create a copy from the other object
+RGBImageStudent::RGBImageStudent(const RGBImageStudent &other) : RGBImage(other.getWidth(), other.getHeight()), pixel_storage(new RGB[getWidth()*getHeight()]) {
+	int max = other.getHeight() * other.getWidth();
+	for (int i = 0; i < max; ++i) {
+		setPixel(i, other.getPixel(i));
+	}
 }
 
 
-RGBImageStudent::RGBImageStudent(const int width, const int height) : RGBImage(width, height) {
-	int throwError = 0, e = 1 / throwError;
-	//TODO: Initialize pixel storage
+RGBImageStudent::RGBImageStudent(const int width, const int height) : RGBImage(width, height), pixel_storage(new RGB[width*height]) {
+	/*for (int i = 0; i < width * height; ++i) {
+		setPixel(i, RGB());
+	}*/
 }
 
 RGBImageStudent::~RGBImageStudent() {
-	int throwError = 0, e = 1 / throwError;
-	//TODO: delete allocated objects
+	delete[] pixel_storage;
+	pixel_storage = nullptr;
 }
 
 void RGBImageStudent::set(const int width, const int height) {
 	RGBImage::set(width, height);
-	int throwError = 0, e = 1 / throwError;
-	//TODO: resize or create a new pixel storage (Don't forget to delete the old storage)
+	delete[] pixel_storage;
+	pixel_storage = new RGB[width * height];
 }
 
 void RGBImageStudent::set(const RGBImageStudent &other) {
 	RGBImage::set(other.getWidth(), other.getHeight());
-	int throwError = 0, e = 1 / throwError;
-	//TODO: resize or create a new pixel storage and copy the object (Don't forget to delete the old storage)
+	delete[] pixel_storage;
+	pixel_storage = new RGB[getWidth(), getHeight()];
+	int max = getWidth() * getHeight();
+	for (int i = 0; i < max; ++i) {
+		setPixel(i, getPixel(i));
+	}
 }
 
 void RGBImageStudent::setPixel(int x, int y, RGB pixel) {
-	int throwError = 0, e = 1 / throwError;
-	//TODO: no comment needed :)
+	// TODO: Add check for invalid index?
+	pixel_storage[(x * y) + y] = pixel;
 }
 
 void RGBImageStudent::setPixel(int i, RGB pixel) {
-	int throwError = 0, e = 1 / throwError;
+	// TODO: Add check for invalid index?
+	pixel_storage[i] = pixel;
 	/*
 	* TODO: set pixel i in "Row-Major Order"
 	*
@@ -64,13 +70,11 @@ void RGBImageStudent::setPixel(int i, RGB pixel) {
 }
 
 RGB RGBImageStudent::getPixel(int x, int y) const {
-	int throwError = 0, e = 1 / throwError;
-	//TODO: no comment needed :)
-	return 0;
+	// TODO: Add check for invalid index?
+	return pixel_storage[(x * y) + y];
 }
 
 RGB RGBImageStudent::getPixel(int i) const {
-	int throwError = 0, e = 1 / throwError;
-	//TODO: see setPixel(int i, RGB pixel)
-	return 0;
+	// TODO: Add check for invalid index?
+	return pixel_storage[i];
 }

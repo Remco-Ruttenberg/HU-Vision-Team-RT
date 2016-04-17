@@ -1,44 +1,50 @@
 #include "IntensityImageStudent.h"
 
 IntensityImageStudent::IntensityImageStudent() : IntensityImage() {
-	int throwError = 0, e = 1 / throwError; //Throws error without the need to include a header
-	//TODO: Nothing
 }
 
-IntensityImageStudent::IntensityImageStudent(const IntensityImageStudent &other) : IntensityImage(other.getWidth(), other.getHeight()) {
-	int throwError = 0, e = 1 / throwError;
-	//TODO: Create a copy from the other object
+IntensityImageStudent::IntensityImageStudent(const IntensityImageStudent &other) : IntensityImage(other.getWidth(), other.getHeight()), pixel_storage(new Intensity[getWidth() * getHeight()]) {
+	int max = other.getHeight() * other.getWidth();
+	for (int i = 0; i < max; ++i) {
+		setPixel(i, other.getPixel(i));
+	}
 }
 
 IntensityImageStudent::IntensityImageStudent(const int width, const int height) : IntensityImage(width, height) {
-	int throwError = 0, e = 1 / throwError;
-	//TODO: Initialize pixel storage
+	/*for (int i = 0; i < width * height; i++) {
+		setPixel(i, Intensity());
+	}*/
 }
 
 IntensityImageStudent::~IntensityImageStudent() {
-	int throwError = 0, e = 1 / throwError;
-	//TODO: delete allocated objects
+	delete[] pixel_storage;
+	pixel_storage = nullptr;
 }
 
 void IntensityImageStudent::set(const int width, const int height) {
 	IntensityImage::set(width, height);
-	int throwError = 0, e = 1 / throwError;
-	//TODO: resize or create a new pixel storage (Don't forget to delete the old storage)
+	delete[] pixel_storage;
+	pixel_storage = new Intensity[width * height];
 }
 
 void IntensityImageStudent::set(const IntensityImageStudent &other) {
 	IntensityImage::set(other.getWidth(), other.getHeight());
-	int throwError = 0, e = 1 / throwError;
-	//TODO: resize or create a new pixel storage and copy the object (Don't forget to delete the old storage)
+	delete[] pixel_storage;
+	pixel_storage = new Intensity[];
+	int max = getHeight() * getWidth();
+	for (int i = 0; i < max; ++i) {
+		setPixel(i, other.getPixel(i));
+	}
 }
 
 void IntensityImageStudent::setPixel(int x, int y, Intensity pixel) {
-	int throwError = 0, e = 1 / throwError;
-	//TODO: no comment needed :)
+	// TODO: Add check for invalid index?
+	pixel_storage[(x * y) + y] = pixel;
 }
 
 void IntensityImageStudent::setPixel(int i, Intensity pixel) {
-	int throwError = 0, e = 1 / throwError;
+	// TODO: Add check for invalid index?
+	pixel_storage[i] = pixel;
 	/*
 	* TODO: set pixel i in "Row-Major Order"
 	*
@@ -63,13 +69,11 @@ void IntensityImageStudent::setPixel(int i, Intensity pixel) {
 }
 
 Intensity IntensityImageStudent::getPixel(int x, int y) const {
-	int throwError = 0, e = 1 / throwError;
-	//TODO: no comment needed :)
-	return 0;
+	// TODO: Add check for invalid index?
+	return pixel_storage[(x * y) + y];
 }
 
 Intensity IntensityImageStudent::getPixel(int i) const {
-	int throwError = 0, e = 1 / throwError;
-	//TODO: see setPixel(int i, RGB pixel)
-	return 0;
+	// TODO: Add check for invalid index?
+	return pixel_storage[i];
 }
