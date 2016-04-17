@@ -3,10 +3,10 @@
 RGBImageStudent::RGBImageStudent() : RGBImage() {
 }
 
-RGBImageStudent::RGBImageStudent(const RGBImageStudent &other) : RGBImage(other.getWidth(), other.getHeight()), pixel_storage(new RGB[getWidth()*getHeight()]) {
+RGBImageStudent::RGBImageStudent(const RGBImageStudent &other) : RGBImage(other.getWidth(), other.getHeight()), pixel_storage(new RGB[other.getWidth()*other.getHeight()]) {
 	int max = other.getHeight() * other.getWidth();
 	for (int i = 0; i < max; ++i) {
-		setPixel(i, other.getPixel(i));
+		pixel_storage[i] = other.pixel_storage[i];
 	}
 }
 
@@ -19,28 +19,28 @@ RGBImageStudent::RGBImageStudent(const int width, const int height) : RGBImage(w
 
 RGBImageStudent::~RGBImageStudent() {
 	delete[] pixel_storage;
-	pixel_storage = nullptr;
+	this->pixel_storage = nullptr;
 }
 
 void RGBImageStudent::set(const int width, const int height) {
 	RGBImage::set(width, height);
 	delete[] pixel_storage;
-	pixel_storage = new RGB[width * height];
+	this->pixel_storage = new RGB[width * height];
 }
 
 void RGBImageStudent::set(const RGBImageStudent &other) {
 	RGBImage::set(other.getWidth(), other.getHeight());
 	delete[] pixel_storage;
-	pixel_storage = new RGB[getWidth(), getHeight()];
+	this->pixel_storage = new RGB[getWidth(), getHeight()];
 	int max = getWidth() * getHeight();
 	for (int i = 0; i < max; ++i) {
-		setPixel(i, getPixel(i));
+		pixel_storage[i] = other.pixel_storage[i];
 	}
 }
 
 void RGBImageStudent::setPixel(int x, int y, RGB pixel) {
 	// TODO: Add check for invalid index?
-	pixel_storage[(x * y) + y] = pixel;
+	pixel_storage[(y * getWidth()) + x] = pixel;
 }
 
 void RGBImageStudent::setPixel(int i, RGB pixel) {
@@ -71,7 +71,7 @@ void RGBImageStudent::setPixel(int i, RGB pixel) {
 
 RGB RGBImageStudent::getPixel(int x, int y) const {
 	// TODO: Add check for invalid index?
-	return pixel_storage[(x * y) + y];
+	return pixel_storage[(y * getWidth()) + x];
 }
 
 RGB RGBImageStudent::getPixel(int i) const {

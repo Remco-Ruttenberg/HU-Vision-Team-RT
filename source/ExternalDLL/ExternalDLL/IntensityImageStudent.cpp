@@ -3,14 +3,14 @@
 IntensityImageStudent::IntensityImageStudent() : IntensityImage() {
 }
 
-IntensityImageStudent::IntensityImageStudent(const IntensityImageStudent &other) : IntensityImage(other.getWidth(), other.getHeight()), pixel_storage(new Intensity[getWidth() * getHeight()]) {
+IntensityImageStudent::IntensityImageStudent(const IntensityImageStudent &other) : IntensityImage(other.getWidth(), other.getHeight()), pixel_storage(new Intensity[other.getWidth() * other.getHeight()]) {
 	int max = other.getHeight() * other.getWidth();
 	for (int i = 0; i < max; ++i) {
-		setPixel(i, other.getPixel(i));
+		pixel_storage[i] = other.pixel_storage[i];
 	}
 }
 
-IntensityImageStudent::IntensityImageStudent(const int width, const int height) : IntensityImage(width, height) {
+IntensityImageStudent::IntensityImageStudent(const int width, const int height) : IntensityImage(width, height), pixel_storage(new Intensity[width * height]) {
 	/*for (int i = 0; i < width * height; i++) {
 		setPixel(i, Intensity());
 	}*/
@@ -18,28 +18,28 @@ IntensityImageStudent::IntensityImageStudent(const int width, const int height) 
 
 IntensityImageStudent::~IntensityImageStudent() {
 	delete[] pixel_storage;
-	pixel_storage = nullptr;
+	this->pixel_storage = nullptr;
 }
 
 void IntensityImageStudent::set(const int width, const int height) {
 	IntensityImage::set(width, height);
 	delete[] pixel_storage;
-	pixel_storage = new Intensity[width * height];
+	this->pixel_storage = new Intensity[width * height];
 }
 
 void IntensityImageStudent::set(const IntensityImageStudent &other) {
 	IntensityImage::set(other.getWidth(), other.getHeight());
 	delete[] pixel_storage;
-	pixel_storage = new Intensity[];
+	this->pixel_storage = new Intensity[getWidth() * getHeight()];
 	int max = getHeight() * getWidth();
 	for (int i = 0; i < max; ++i) {
-		setPixel(i, other.getPixel(i));
+		pixel_storage[i] = other.pixel_storage[i];
 	}
 }
 
 void IntensityImageStudent::setPixel(int x, int y, Intensity pixel) {
 	// TODO: Add check for invalid index?
-	pixel_storage[(x * y) + y] = pixel;
+	pixel_storage[y * getWidth() + x] = pixel;
 }
 
 void IntensityImageStudent::setPixel(int i, Intensity pixel) {
@@ -70,7 +70,7 @@ void IntensityImageStudent::setPixel(int i, Intensity pixel) {
 
 Intensity IntensityImageStudent::getPixel(int x, int y) const {
 	// TODO: Add check for invalid index?
-	return pixel_storage[(x * y) + y];
+	return pixel_storage[y * getWidth() + x];
 }
 
 Intensity IntensityImageStudent::getPixel(int i) const {
