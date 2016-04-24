@@ -5,6 +5,7 @@
 
 # Temporary VS file (when opened)
 *.vc.opendb
+*.vc.db
 
 ExternalDLL/ExternalDLL/OpenCV/staticlib_x86_vc12/OpenCVConfig.cmake
 ExternalDLL/ExternalDLL/OpenCV/staticlib_x86_vc12/OpenCVModules.cmake
