@@ -10,14 +10,6 @@ IntensityImageStudent::IntensityImageStudent(const IntensityImageStudent &other)
 	}
 }
 
-IntensityImageStudent::IntensityImageStudent(const RGBImageStudent &other) : IntensityImage(other.getWidth(), other.getHeight()), pixel_storage(new Intensity[other.getWidth() * other.getHeight()]) {
-	int max = other.getHeight() * other.getWidth();
-	for (int i = 0; i < max; ++i) {
-		RGB p = other.getPixel(i);
-		pixel_storage[i] = Intensity(p.r * 0.299f + p.g * 0.587f + p.b * 0.114f);
-	}
-}
-
 IntensityImageStudent::IntensityImageStudent(const int width, const int height) : IntensityImage(width, height), pixel_storage(new Intensity[width * height]) {
 	/*for (int i = 0; i < width * height; i++) {
 		setPixel(i, Intensity());

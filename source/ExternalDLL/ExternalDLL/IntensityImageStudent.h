@@ -6,12 +6,10 @@
 
 #pragma once
 #include "IntensityImage.h"
-#include "RGBImageStudent.h" // Used for RGB to Gray conversion
 class IntensityImageStudent : public IntensityImage {
 public:
 	IntensityImageStudent();
 	IntensityImageStudent(const IntensityImageStudent &other);
-	IntensityImageStudent(const RGBImageStudent &other);
 	IntensityImageStudent(const int width, const int height);
 	~IntensityImageStudent();
 
