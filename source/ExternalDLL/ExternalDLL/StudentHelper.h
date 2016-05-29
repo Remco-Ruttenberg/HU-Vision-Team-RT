@@ -12,7 +12,21 @@ public:
 	class Kernel
 	{
 	public:
+		enum KernelCreationMode
+		{
+			Manual = 0x0,
+			HorizontalMirrored = 0x1,
+			VerticalMirrored = 0x2,
+			Mirrored = HorizontalMirrored | VerticalMirrored,
+			HorizontalSequential = 0x4,
+			VerticalSequential = 0x6,
+			Sequential = HorizontalSequential | VerticalSequential
+		};
+
 		Kernel() {
+			if (Width < 1 || Height < 1) {
+				throw std::invalid_argument("Kernel must be at least 1x1 in size!");
+			}
 			if (Width % 2 == 0 || Height % 2 == 0) {
 				throw std::invalid_argument("Kernel does not (yet) support even sizes!");
 			}
@@ -21,6 +35,43 @@ public:
 					kernel[x][y] = 0; // Necessary?
 				}
 			}
+		}
+
+		/// WORK IN PROGRESS
+
+		/// Creates a kernel based on the supplied arguments
+		/// \param mode this will create the kernel based on the mode type and specified values
+		/// \param xvalues all the values the kernel will contain along the horizontal axis, applied according to the mode
+		/// \param yvalues all the values the kernel will contain along the vertical axis, applied according to the mode
+		/// \param size the size of the specified kernel. [width,height] . Only required for manual mode
+		/// \return the generated kernel
+		Kernel createKernel(KernelCreationMode mode, std::vector<int> xvalues, std::vector<int> yvalues, int size [2]) {
+			if (xvalues.size() < 1) {
+				throw std::invalid_argument("Kernel must be at least 1x1 in size!");
+			}
+			if (mode != KernelCreationMode::Manual && mode != KernelCreationMode::Mirrored && yvalues.size() < 1) {
+				throw std::invalid_argument("Kernel must be at least 1x1 in size!");
+			}
+			if (mode != KernelCreationMode::Sequential) {
+				throw std::runtime_error("Specified KernelCreationMode of " + (int)mode + " is not yet supported!");
+			}
+			int width = (mode == KernelCreationMode::Manual) ? size[0] : xvalues;
+			width = (mode == KernelCreationMode::HorizontalMirrored) ? width / 2 + width % 2 : width;
+			int height = (mode == KernelCreationMode::Manual) ? size[1] : yvalues;
+			height = (mode == KernelCreationMode::VerticalMirrored) ? height / 2 + height % 2 : height;
+			Kernel<width, height> k;
+
+			switch (mode)
+			{
+			Sequential:
+				for (int x = 0; x < xvalues.size(); ++x) {
+					for (int y = 0; y < yvalues.size(); ++y) {
+						k.kernel[x][y] = 0;
+					}
+				}
+			}
+
+			return k;
 		}
 
 		IntensityImage* createImageFromKernel(const IntensityImage & image, Kernel k) {
